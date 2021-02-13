@@ -14,7 +14,12 @@ def pre_processing(image):
     """
     gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     # converting it to binary image
-    threshold_img = cv2.threshold(gray_image, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
+    threshold_img = gray_image
+    # threshold_img= cv2.adaptiveThreshold(gray_image,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,\
+            # cv2.THRESH_BINARY,13,8) works good
+    threshold_img= cv2.adaptiveThreshold(gray_image,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C,\
+            cv2.THRESH_BINARY,13,8)
+    # threshold_img = cv2.threshold(gray_image, 1000, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
     # saving image to view threshold image
     cv2.imwrite('thresholded.png', threshold_img)
 
@@ -114,6 +119,7 @@ if __name__ == "__main__":
     thresholds_image = pre_processing(image)
     # calling parse_text function to get text from image by Tesseract.
     parsed_data = parse_text(thresholds_image)
+    print(parsed_data)
     # defining threshold for draw box
     accuracy_threshold = 30
     # calling draw_boxes function which will draw dox around text area.
